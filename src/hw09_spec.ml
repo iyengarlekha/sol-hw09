@@ -64,9 +64,8 @@ let add_remove_equals_tests =
    [A; A], [A; A], [A], false;
  ]
     
-
 let union_tests =
-  (* m1, m2, expected_result *)
+  (* m1, m2, expected_result of union m1 m2 *)
   [[], [], [];
    [], [A], [A];
    [A], [], [A];
@@ -77,23 +76,9 @@ let union_tests =
    [A; B; C], [], [A; B; C];
    [A; B; C], [A; A; C], [A; A; B; C];
    [A; B; B], [A; A; B; C], [A; A; B; B; C]]
-
-let union_tests =
-  (* m1, m2, expected_result *)
-  [[], [], [];
-   [], [A], [A];
-   [A], [], [A];
-   [A], [A], [A];
-   [A; B], [A], [A; B];
-   [A; A; B], [A; B; B], [A; A; B; B];
-   [A; B; C], [A], [A; B; C];
-   [A; B; C], [], [A; B; C];
-   [A; B; C], [A; A; C], [A; A; B; C];
-   [A; B; B], [A; A; B; C], [A; A; B; B; C]]
-
 
 let inter_tests =
-  (* m1, m2, expected_result *)
+  (* m1, m2, expected_result of inter m1 m2*)
   [[], [], [];
    [], [A], [];
    [A], [], [];
@@ -107,7 +92,7 @@ let inter_tests =
    [A; B; B], [A; A; B; B; C], [A; B; B]]
 
 let diff_tests =
-  (* m1, m2, expected_result *)
+  (* m1, m2, expected_result of diff m1 m2 *)
   [[], [], [];
    [], [A], [];
    [A], [], [A];
@@ -120,10 +105,9 @@ let diff_tests =
    [A; B; B], [A; A; B; C], [B];
    [A; B; B], [A; A; B; B; C], [];
    [A; A; B; B], [A; C], [A; B; B]]
-
     
 let sum_tests =
-  (* m1, m2, expected_result *)
+  (* m1, m2, expected_result of sum m1 m2 *)
   [[], [], [];
    [], [A], [A];
    [A], [], [A];
@@ -259,9 +243,8 @@ let part3_count_suite =
     let m1 = MyOMultiset.of_list m1 in
     let m2 = MyOMultiset.of_list m2 in
     let name =
-      Printf.sprintf "compare %s %s"
-        (MyOMultiset.to_string string_of_int m1)
-        (MyOMultiset.to_string string_of_int m2) in
+      Printf.sprintf "compare test"
+    in
     name >::
     fun tc ->
       assert (p @@ MyOMultiset.compare m1 m2))
