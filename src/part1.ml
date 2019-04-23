@@ -112,6 +112,6 @@ module Multiset : MultisetType = struct
     m |>
     List.map (fun (x, c) -> Printf.sprintf "%s -> %d" (string_of_u x) c) |>
     String.concat ", " |>
-    fun s -> "[" ^ s ^ "]"
+    fun s -> "{" ^ s ^ "}"
 end
 

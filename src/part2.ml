@@ -45,11 +45,11 @@ module Make(O: Map.OrderedType) : MultisetType with type u = O.t = struct
   let remove m x =
     M.update x (function Some c when c > 1 -> Some (c - 1) | _ -> None) m
 
-    let union m1 m2 =
-      M.merge (fun x a1 a2 -> match a1, a2 with
-      | None, Some c | Some c, None -> Some c
-      | Some c1, Some c2 -> Some (max c1 c2)
-      | _ -> None) m1 m2
+  let union m1 m2 =
+    M.merge (fun x a1 a2 -> match a1, a2 with
+    | None, Some c | Some c, None -> Some c
+    | Some c1, Some c2 -> Some (max c1 c2)
+    | _ -> None) m1 m2
       
   let inter m1 m2 =
     M.merge (fun x a1 a2 -> match a1, a2 with
@@ -76,7 +76,7 @@ module Make(O: Map.OrderedType) : MultisetType with type u = O.t = struct
     M.bindings m |>
     List.map (fun (x, c) -> Printf.sprintf "%s -> %d" (string_of_u x) c) |>
     String.concat ", " |>
-    fun s -> "[" ^ s ^ "]"
+    fun s -> "{" ^ s ^ "}"
 
   let max_opt m = match M.max_binding_opt m with
   | Some (x, _) -> Some x
