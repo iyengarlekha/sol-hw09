@@ -10,9 +10,10 @@ module type MultisetType = sig
   val inter: t -> t -> t
   val diff: t -> t -> t
   val union: t -> t -> t
+  val sum: t -> t -> t
   val equals: t -> t -> bool
 
-  (** Convert a list of base elements into a multiset *)
+  (** Convert a list of base elements to a multiset *)
   val of_list: u list -> t
 
   (** Return a string representation of the multiset *)

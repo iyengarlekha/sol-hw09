@@ -9,9 +9,10 @@ module type MultisetType = sig
   val inter: 'u t -> 'u t -> 'u t
   val diff: 'u t -> 'u t -> 'u t
   val union: 'u t -> 'u t -> 'u t
+  val sum: 'u t -> 'u t -> 'u t
   val equals: 'u t -> 'u t -> bool
 
-  (** Convert a list of base elements into a multiset *)
+  (** Convert a list of base elements to a multiset *)
   val of_list: 'u list -> 'u t
 
   (** Return a string representation of the multiset *)
@@ -19,12 +20,17 @@ module type MultisetType = sig
 end
 
 module Multiset : MultisetType = struct
-  (* We implement 'u t as a list of pairs of base elements and their multiplicity.
-     The invariant maintained by the implementation is:
-     * the lists are sorted in increasing order according to the generic compare function on 'u
-     * the lists only track non-zero multiplicities
-     These invariants guarantee that the representation of each multiset is unique 
-     and we can simply use equality on lists to test equality of multisets.
+  (* We implement 'u t as list of pairs of base elements and their
+     multiplicity.  The invariant maintained by the implementation is:
+
+     - the pairs are sorted in increasing order of their first
+       component according to the generic compare function on 'u
+
+     - the lists only track non-zero multiplicities
+
+     These invariants guarantee that each multiset is represented by a
+     unique list and we can simply use equality on lists to test
+     equality of multisets.
    *)
   type 'u t = ('u * int) list
 
@@ -58,10 +64,13 @@ module Multiset : MultisetType = struct
     in
     merge [] m1 m2 
 
-  let count m x =
-    match List.assoc_opt x m with
-    | Some c -> c
-    | None -> 0
+  let rec count m x = match m with
+  | (y, c) :: m1 ->
+      let cmp = compare x y in
+      if cmp = 0 then c else
+      if cmp < 0 then 0 else
+      count m1 x
+  | [] -> 0
 
   let empty = []
 
@@ -79,7 +88,7 @@ module Multiset : MultisetType = struct
       
   let inter m1 m2 =
     merge (fun x c1 c2 ->
-      if c1 + c2 > 0
+      if c1 > 0 && c2 > 0
       then [(x, min c1 c2)]
       else []) m1 m2
 
