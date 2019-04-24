@@ -164,7 +164,7 @@ let bin_suite op op_name tests multiset_of_list equals =
 
 (** Part 1 tests *)
 
-let part1_string_of_multiset m = Multiset.to_string string_of_my_u m
+(*let part1_string_of_multiset m = Multiset.to_string string_of_my_u m*)
 let part1_multiset_of_list = List.fold_left Multiset.add Multiset.empty
 let part1_equals m1 m2 = List.for_all (fun x -> Multiset.count m1 x = Multiset.count m2 x) [A; B; C]
     
@@ -193,7 +193,7 @@ module MyMultiset = Part2.Make(struct
   | _ -> assert (x = y); 0
 end)
 
-let part2_string_of_multiset m = MyMultiset.to_string string_of_my_u m
+(*let part2_string_of_multiset m = MyMultiset.to_string string_of_my_u m*)
 let part2_multiset_of_list = List.fold_left MyMultiset.add MyMultiset.empty
 let part2_equals m1 m2 = List.for_all (fun x -> MyMultiset.count m1 x = MyMultiset.count m2 x) [A; B; C]
 
@@ -220,26 +220,26 @@ module MyOMultiset = Part3.Make(struct
 end)
 
 let part3_compare_tests =
-  (* m1, m2, test for result of compare *)
-  [[1; 1; 1; 2; 2], [1; 1; 3], (fun cmp -> cmp < 0);
-   [1; 1; 3], [1; 1; 1; 2; 2], (fun cmp -> cmp > 0);
-   [1; 1; 2; 2], [1; 1; 1; 2; 2], (fun cmp -> cmp < 0);
-   [1; 1; 1; 2; 2], [1; 1; 2; 2], (fun cmp -> cmp > 0);
-   [], [], (fun cmp -> cmp = 0);
-   [1], [1], (fun cmp -> cmp = 0);
-   [1; 1], [1; 1], (fun cmp -> cmp = 0);
-   [1; 1; 3], [1; 3; 1], (fun cmp -> cmp = 0);
-   [1; 1; 3; 2; 2], [2; 1; 3; 1; 2], (fun cmp -> cmp = 0);
-   [], [1], (fun cmp -> cmp < 0);
-   [1], [], (fun cmp -> cmp > 0);
-   [], [1; 1], (fun cmp -> cmp < 0);
-   [1; 1], [], (fun cmp -> cmp > 0);
-   [], [1; 2; 1], (fun cmp -> cmp < 0);
-   [1; 2; 1], [], (fun cmp -> cmp > 0);
+  (* m1, m2, test for result of compare, description *)
+  [[1; 1; 1; 2; 2], [1; 1; 3], (fun cmp -> cmp < 0), "Expected negative integer.";
+   [1; 1; 3], [1; 1; 1; 2; 2], (fun cmp -> cmp > 0), "Expected positive integer.";
+   [1; 1; 2; 2], [1; 1; 1; 2; 2], (fun cmp -> cmp < 0), "Expected negative integer.";
+   [1; 1; 1; 2; 2], [1; 1; 2; 2], (fun cmp -> cmp > 0), "Expected positive integer.";
+   [], [], (fun cmp -> cmp = 0), "Expected 0.";
+   [1], [1], (fun cmp -> cmp = 0), "Expected 0.";
+   [1; 1], [1; 1], (fun cmp -> cmp = 0), "Expected 0.";
+   [1; 1; 3], [1; 3; 1], (fun cmp -> cmp = 0), "Expected 0.";
+   [1; 1; 3; 2; 2], [2; 1; 3; 1; 2], (fun cmp -> cmp = 0), "Expected 0.";
+   [], [1], (fun cmp -> cmp < 0), "Expected negative integer.";
+   [1], [], (fun cmp -> cmp > 0), "Expected positive integer.";
+   [], [1; 1], (fun cmp -> cmp < 0), "Expected negative integer.";
+   [1; 1], [], (fun cmp -> cmp > 0), "Expected positive integer.";
+   [], [1; 2; 1], (fun cmp -> cmp < 0), "Expected negative integer.";
+   [1; 2; 1], [], (fun cmp -> cmp > 0), "Expected positive integer.";
  ]
 
 let part3_count_suite =
-  List.map (fun (m1, m2, p) ->
+  List.map (fun (m1, m2, p, msg) ->
     let m1 = MyOMultiset.of_list m1 in
     let m2 = MyOMultiset.of_list m2 in
     let name =
@@ -247,7 +247,7 @@ let part3_count_suite =
     in
     name >::
     fun tc ->
-      assert (p @@ MyOMultiset.compare m1 m2))
+      assert_bool msg (p @@ MyOMultiset.compare m1 m2))
     part3_compare_tests
 
 
